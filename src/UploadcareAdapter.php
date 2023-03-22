@@ -1,7 +1,8 @@
 <?php
 
 namespace Vormkracht10\UploadcareAdapter;
-use \League\Flysystem\FilesystemAdapter;
+
+use League\Flysystem\FilesystemAdapter;
 
 class UploadcareAdapter implements FilesystemAdapter
 {
@@ -17,5 +18,4 @@ class UploadcareAdapter implements FilesystemAdapter
     {
         $this->api = $api;
     }
-
 }

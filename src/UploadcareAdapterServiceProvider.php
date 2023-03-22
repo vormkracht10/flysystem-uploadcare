@@ -2,8 +2,8 @@
 
 namespace Vormkracht10\UploadcareAdapter;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\ServiceProvider;
 
 class UploadcareAdapterServiceProvider extends ServiceProvider
 {
