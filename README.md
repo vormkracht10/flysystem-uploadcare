@@ -23,6 +23,7 @@ Add the following config to the `disk` array in config/filesystems.php
         'driver' => 'uploadcare',
         'public_key' => env('UPLOADCARE_PUBLIC_KEY'),
         'secret_key' => env('UPLOADCARE_SECRET_KEY'),
+        'cdn' => env('UPLOADCARE_CDN') // Default https://ucarecdn.com
     ]
 ]
 ```
@@ -32,6 +33,39 @@ Then set the `FILESYSTEM_DISK` to `uploadcare` in your .env
 ```env
 FILESYSTEM_DISK=uploadcare
 ```
+
+## Examples
+
+Adding a file
+
+```php
+Storage::disk('uploadcare')->put('example.txt', 'My notes.');
+```
+
+Get the content of a file
+
+```php
+Storage::disk('uploadcare')->get('<uuid>');
+```
+
+Deleting a file:
+
+```php
+Storage::disk('uploadcare')->delete('<uuid>');
+```
+
+Getting the mimetype of a file
+```php
+$mimeType = Storage::disk('uploadcare')->mimeType('<uuid>');
+```
+
+Get the filesize of a file
+```php
+$bytes = Storage::disk('uploadcare')->filesize('<uuid>');
+```
+
+Working with images?
+See [github.com/vormkracht10/php-uploadcare-transformations](https://github.com/vormkracht10/php-uploadcare-transformations)
 
 ## Testing
 
