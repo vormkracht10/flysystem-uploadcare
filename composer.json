@@ -1,24 +1,27 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "vormkracht10/flysystem-uploadcare",
+    "description": "Flysystem driver for Uploadcare for Laravel.",
     "keywords": [
-        ":vendor_name",
+        "Vormkracht10",
         "laravel",
-        ":package_slug"
+        "flysystem-uploadcare",
+        "uploadcare",
+        "storage"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/vormkracht10/flysystem-uploadcare",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Mathieu",
+            "email": "mathieu@vormkracht10.nl",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.1",
-        "spatie/laravel-package-tools": "^1.14.0",
-        "illuminate/contracts": "^10.0"
+        "illuminate/support": "^10.4",
+        "league/flysystem": "^3.0",
+        "uploadcare/uploadcare-php": "^4.1"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
@@ -30,18 +33,17 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.6",
-        "spatie/laravel-ray": "^1.26"
+        "phpunit/phpunit": "^9.6"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Vormkracht10\\UploadcareAdapter\\": "src",
+            "Vormkracht10\\UploadcareAdapter\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Vormkracht10\\UploadcareAdapter\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -61,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Vormkracht10\\UploadcareAdapter\\UploadcareAdapterServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "UploadcareAdapter": "Vormkracht10\\UploadcareAdapter\\Facades\\UploadcareAdapter"
             }
         }
     },
