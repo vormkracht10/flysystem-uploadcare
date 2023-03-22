@@ -4,18 +4,17 @@ namespace Vormkracht10\UploadcareAdapter;
 
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
-use \League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemAdapter;
 
 class UploadcareAdapter implements FilesystemAdapter
 {
     /** @var \Uploadcare\Api */
     protected $api;
+
     protected $cdn = 'https://ucarecdn.com';
 
     /**
      * Create the adapter with access to Uploadcare's api.
-     *
-     * @param  \Uploadcare\Api  $api
      */
     public function __construct(\Uploadcare\Api $api, ?string $cdn = null)
     {
@@ -39,6 +38,7 @@ class UploadcareAdapter implements FilesystemAdapter
             }
             throw $e;
         }
+
         return true;
     }
 
@@ -63,7 +63,7 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @param resource $contents
+     * @param  resource  $contents
      *
      * @throws UnableToWriteFile
      * @throws FilesystemException
@@ -77,7 +77,7 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update($path, $contents, Config $config)
     {
@@ -93,11 +93,11 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function read(string $path): string
     {
-
-        $url = $this->cdn  . '/' . $path . '/';
+        $url = $this->cdn.'/'.$path.'/';
 
         return file_get_contents($url);
     }
+
     /**
      * @return resource
      *
@@ -106,8 +106,7 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function readStream(string $path)
     {
-
-        $url = $this->cdn . '/' . $path . '/';
+        $url = $this->cdn.'/'.$path.'/';
 
         return fopen($url, 'rb');
     }
@@ -155,7 +154,6 @@ class UploadcareAdapter implements FilesystemAdapter
 
     public function getFileinfo(string $path): FileAttributes
     {
-
         $info = $this->api->file()->fileInfo($path);
 
         return new FileAttributes(
