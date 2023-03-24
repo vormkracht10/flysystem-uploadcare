@@ -36,10 +36,10 @@ FILESYSTEM_DISK=uploadcare
 
 ## Examples
 
-Adding a file
+**Please note**: Since adding files to uploadcare always returns a unique id that will be used to retrieve files you might wanna use the `*GetUuid()` function(s) for writing files.
 
 ```php
-Storage::disk('uploadcare')->put('example.txt', 'My notes.');
+$uuid = Storage::disk('uploadcare')->putGetUuid('example.txt', 'My notes.');
 ```
 
 Get the content of a file
