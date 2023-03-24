@@ -3,8 +3,8 @@
 namespace Vormkracht10\UploadcareAdapter;
 
 use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
 
 class UploadcareAdapterServiceProvider extends ServiceProvider
@@ -12,7 +12,6 @@ class UploadcareAdapterServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Storage::extend('uploadcare', function ($app, $config) {
-
             $configuration = \Uploadcare\Configuration::create($config['public_key'], $config['secret_key']);
             $api = new \Uploadcare\Api($configuration);
 
@@ -28,7 +27,6 @@ class UploadcareAdapterServiceProvider extends ServiceProvider
                 return Storage::disk('uploadcare')->getAdapter()->putFileAsGetUuid($path, $contents, $name, $options);
             });
 
-            
             return new FilesystemAdapter(
                 new Filesystem($adapter, $config),
                 $adapter,

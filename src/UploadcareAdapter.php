@@ -6,7 +6,7 @@ use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\File;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
-use \League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use Psr\Http\Message\StreamInterface;
@@ -15,6 +15,7 @@ class UploadcareAdapter implements FilesystemAdapter
 {
     /** @var \Uploadcare\Api */
     protected $api;
+
     /**
      * The filesystem configuration.
      *
@@ -22,15 +23,12 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     protected $config;
 
-
     protected static $macros = [
-        'putGetUuid'
+        'putGetUuid',
     ];
 
     /**
      * Create the adapter with access to Uploadcare's api.
-     *
-     * @param  \Uploadcare\Api  $api
      */
     public function __construct(\Uploadcare\Api $api, ?array $config = [])
     {
@@ -40,8 +38,6 @@ class UploadcareAdapter implements FilesystemAdapter
 
     /**
      * Determine if Flysystem exceptions should be thrown.
-     *
-     * @return bool
      */
     protected function throwsExceptions(): bool
     {
@@ -50,8 +46,6 @@ class UploadcareAdapter implements FilesystemAdapter
 
     /**
      * Get the cdn
-     * 
-     * @return string
      */
     protected function getCdn(): string
     {
@@ -72,6 +66,7 @@ class UploadcareAdapter implements FilesystemAdapter
             }
             throw $e;
         }
+
         return true;
     }
 
@@ -111,7 +106,7 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @param resource $contents
+     * @param  resource  $contents
      *
      * @throws UnableToWriteFile
      * @throws FilesystemException
@@ -125,7 +120,7 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @param resource $contents
+     * @param  resource  $contents
      *
      * @throws UnableToWriteFile
      * @throws FilesystemException
@@ -169,7 +164,6 @@ class UploadcareAdapter implements FilesystemAdapter
                 : $this->writeGetUuid($path, $contents, $options);
 
             return $uuid;
-
         } catch (UnableToWriteFile|UnableToSetVisibility $e) {
             throw_if($this->throwsExceptions(), $e);
 
@@ -217,7 +211,7 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update($path, $contents, Config $config)
     {
@@ -233,11 +227,11 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function read(string $path): string
     {
-
-        $url = $this->getCdn()  . '/' . $path . '/';
+        $url = $this->getCdn().'/'.$path.'/';
 
         return file_get_contents($url);
     }
+
     /**
      * @return resource
      *
@@ -246,8 +240,7 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function readStream(string $path)
     {
-
-        $url = $this->getCdn() . '/' . $path . '/';
+        $url = $this->getCdn().'/'.$path.'/';
 
         return fopen($url, 'rb');
     }
@@ -295,7 +288,6 @@ class UploadcareAdapter implements FilesystemAdapter
 
     public function getFileinfo(string $path): FileAttributes
     {
-
         $info = $this->api->file()->fileInfo($path);
 
         return new FileAttributes(
