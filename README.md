@@ -40,6 +40,11 @@ FILESYSTEM_DISK=uploadcare
 
 ```php
 $uuid = Storage::disk('uploadcare')->putGetUuid('example.txt', 'My notes.');
+
+$uuid = Storage::disk('uploadcare')->putFileGetUuid('files', new File('/var/www/uploadcare-app/routes/newcontent.txt'));
+
+$uuid = Storage::disk('uploadcare')->putFileAsGetUuid('files', new File('/var/www/uploadcare-app/routes/newcontent.txt'), 'my-awesome-name.txt');
+
 ```
 
 Get the content of a file
