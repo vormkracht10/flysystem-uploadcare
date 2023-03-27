@@ -9,8 +9,8 @@ use InvalidArgumentException;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\UnableToCheckExistence;
 use League\Flysystem\InvalidVisibilityProvided;
+use League\Flysystem\UnableToCheckExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
@@ -72,6 +72,7 @@ class UploadcareAdapter implements FilesystemAdapter
                 return false;
             }
             throw_if($this->throwsExceptions(), (new UnableToCheckExistence($e->getMessage())));
+
             return false;
         }
 
@@ -90,6 +91,7 @@ class UploadcareAdapter implements FilesystemAdapter
                 return false;
             }
             throw_if($this->throwsExceptions(), (new UnableToCheckExistence($e->getMessage())));
+
             return false;
         }
 
@@ -106,8 +108,7 @@ class UploadcareAdapter implements FilesystemAdapter
                 content: $contents,
                 filename: $path
             );
-        }
-        catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw_if($this->throwsExceptions(), (new UnableToWriteFile($e->getMessage())));
         }
     }
@@ -122,8 +123,7 @@ class UploadcareAdapter implements FilesystemAdapter
                 content: $contents,
                 filename: $path
             );
-        }
-        catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw_if($this->throwsExceptions(), (new UnableToWriteFile($e->getMessage())));
         }
 
@@ -142,8 +142,7 @@ class UploadcareAdapter implements FilesystemAdapter
                 handle: $contents,
                 filename: $path
             );
-        }
-        catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw_if($this->throwsExceptions(), (new UnableToWriteFile($e->getMessage())));
         }
     }
@@ -160,8 +159,7 @@ class UploadcareAdapter implements FilesystemAdapter
                 handle: $contents,
                 filename: $path
             );
-        }
-        catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw_if($this->throwsExceptions(), (new UnableToWriteFile($e->getMessage())));
         }
 
@@ -263,8 +261,7 @@ class UploadcareAdapter implements FilesystemAdapter
 
         try {
             $content = file_get_contents($url);
-        }
-        catch (ErrorException $e) {
+        } catch (ErrorException $e) {
             throw_if($this->throwsExceptions(), (new UnableToReadFile($e->getMessage())));
         }
 
@@ -282,8 +279,7 @@ class UploadcareAdapter implements FilesystemAdapter
 
         try {
             $stream = fopen($url, 'rb');
-        }
-        catch (ErrorException $e) {
+        } catch (ErrorException $e) {
             throw_if($this->throwsExceptions(), (new UnableToReadFile($e->getMessage())));
         }
 
@@ -297,8 +293,7 @@ class UploadcareAdapter implements FilesystemAdapter
     {
         try {
             $this->api->file()->deleteFile($path);
-        }
-        catch (HttpException $e) {
+        } catch (HttpException $e) {
             throw_if($this->throwsExceptions(), (new UnableToDeleteFile($e->getMessage())));
         }
     }
@@ -343,8 +338,7 @@ class UploadcareAdapter implements FilesystemAdapter
     {
         try {
             $info = $this->api->file()->fileInfo($path);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw_if($this->throwsExceptions(), (new UnableToRetrieveMetadata($e->getMessage())));
         }
 
