@@ -2,14 +2,27 @@
 
 namespace Vormkracht10\UploadcareAdapter;
 
+use ErrorException;
 use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\File;
+use InvalidArgumentException;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\UnableToCheckExistence;
+use League\Flysystem\FilsystemException;
+use League\Flysystem\InvalidVisibilityProvided;
+use League\Flysystem\UnableToCopyFile;
+use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToDeleteDirectory;
+use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use Psr\Http\Message\StreamInterface;
+use Uploadcare\Exception\HttpException;
 
 class UploadcareAdapter implements FilesystemAdapter
 {
@@ -22,10 +35,6 @@ class UploadcareAdapter implements FilesystemAdapter
      * @var array
      */
     protected $config;
-
-    protected static $macros = [
-        'putGetUuid',
-    ];
 
     /**
      * Create the adapter with access to Uploadcare's api.
@@ -53,7 +62,6 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @throws FilesystemException
      * @throws UnableToCheckExistence
      */
     public function fileExists(string $path): bool
@@ -64,43 +72,59 @@ class UploadcareAdapter implements FilesystemAdapter
             if ($e->getCode() == 404) {
                 return false;
             }
-            throw $e;
+            throw new UnableToCheckExistence($e->getMessage());
         }
 
         return true;
     }
 
     /**
-     * @throws FilesystemException
      * @throws UnableToCheckExistence
      */
     public function directoryExists(string $path): bool
     {
+        try {
+            $this->api->group()->groupInfo($path);
+        } catch (\Uploadcare\Exception\HttpException $e) {
+            if ($e->getCode() == 404) {
+                return false;
+            }
+            throw new UnableToCheckExistence($e->getMessage());
+        }
+
         return true;
     }
 
     /**
      * @throws UnableToWriteFile
-     * @throws FilesystemException
      */
     public function write(string $path, string $contents, Config $config): void
     {
-        $this->api->uploader()->fromContent(
-            content: $contents,
-            filename: $path
-        );
+        try {
+            $this->api->uploader()->fromContent(
+                content: $contents,
+                filename: $path
+            );
+        }
+        catch (InvalidArgumentException $e) {
+            throw new UnableToWriteFile($e->getMessage());
+        }
     }
 
     /**
      * @throws UnableToWriteFile
-     * @throws FilesystemException
      */
     public function writeGetUuid(string $path, string $contents, $config): string
     {
-        $result = $this->api->uploader()->fromContent(
-            content: $contents,
-            filename: $path
-        );
+        try {
+            $result = $this->api->uploader()->fromContent(
+                content: $contents,
+                filename: $path
+            );
+        }
+        catch (InvalidArgumentException $e) {
+            throw new UnableToWriteFile($e->getMessage());
+        }
 
         return $result->getUuid();
     }
@@ -109,28 +133,36 @@ class UploadcareAdapter implements FilesystemAdapter
      * @param  resource  $contents
      *
      * @throws UnableToWriteFile
-     * @throws FilesystemException
      */
     public function writeStream(string $path, $contents, Config $config): void
     {
-        $this->api->uploader()->fromResource(
-            handle: $contents,
-            filename: $path
-        );
+        try {
+            $this->api->uploader()->fromResource(
+                handle: $contents,
+                filename: $path
+            );
+        }
+        catch (InvalidArgumentException $e) {
+            throw new UnableToWriteFile($e->getMessage());
+        }
     }
 
     /**
      * @param  resource  $contents
      *
      * @throws UnableToWriteFile
-     * @throws FilesystemException
      */
     public function writeStreamGetUuid(string $path, $contents, $config): string
     {
-        $result = $this->api->uploader()->fromResource(
-            handle: $contents,
-            filename: $path
-        );
+        try {
+            $result = $this->api->uploader()->fromResource(
+                handle: $contents,
+                filename: $path
+            );
+        }
+        catch (InvalidArgumentException $e) {
+            throw new UnableToWriteFile($e->getMessage());
+        }
 
         return $result->getUuid();
     }
@@ -223,72 +255,97 @@ class UploadcareAdapter implements FilesystemAdapter
 
     /**
      * @throws UnableToReadFile
-     * @throws FilesystemException
      */
     public function read(string $path): string
     {
         $url = $this->getCdn().'/'.$path.'/';
 
-        return file_get_contents($url);
+        try {
+            $content = file_get_contents($url);
+        }
+        catch (ErrorException $e) {
+            throw new UnableToReadFile($e->getMessage());
+        }
+
+        return $content;
     }
 
     /**
      * @return resource
      *
      * @throws UnableToReadFile
-     * @throws FilesystemException
      */
     public function readStream(string $path)
     {
         $url = $this->getCdn().'/'.$path.'/';
 
-        return fopen($url, 'rb');
+        try {
+            $stream = fopen($url, 'rb');
+        }
+        catch (ErrorException $e) {
+            throw new UnableToReadFile($e->getMessage());
+        }
+
+        return $stream;
     }
 
     /**
      * @throws UnableToDeleteFile
-     * @throws FilesystemException
      */
     public function delete(string $path): void
     {
-        $this->api->file()->deleteFile($path);
+        try {
+            $this->api->file()->deleteFile($path);
+        }
+        catch (HttpException $e) {
+            throw new UnableToDeleteFile($e->getMessage());
+        }
     }
 
     /**
      * @throws UnableToDeleteDirectory
-     * @throws FilesystemException
      */
     public function deleteDirectory(string $path): void
     {
+        try {
+            $this->api->group()->removeGroup($path);
+        } catch (\Uploadcare\Exception\HttpException $e) {
+            throw new UnableToDeleteDirectory($e->getMessage());
+        }
     }
 
     /**
      * @throws UnableToCreateDirectory
-     * @throws FilesystemException
      */
     public function createDirectory(string $path, Config $config): void
     {
+        throw new UnableToCreateDirectory('Unable to create group');
     }
 
     /**
      * @throws InvalidVisibilityProvided
-     * @throws FilesystemException
      */
     public function setVisibility(string $path, string $visibility): void
     {
+        throw new InvalidVisibilityProvided();
     }
 
     /**
      * @throws UnableToRetrieveMetadata
-     * @throws FilesystemException
      */
     public function visibility(string $path): FileAttributes
     {
+        return $this->getFileinfo($path);
     }
 
     public function getFileinfo(string $path): FileAttributes
     {
-        $info = $this->api->file()->fileInfo($path);
+        try {
+            $info = $this->api->file()->fileInfo($path);
+        }
+        catch (\Exception $e) {
+            throw new UnableToRetrieveMetadata($e->getMessage());
+        }
 
         return new FileAttributes(
             path: $info->getOriginalFilename(),
@@ -301,7 +358,6 @@ class UploadcareAdapter implements FilesystemAdapter
 
     /**
      * @throws UnableToRetrieveMetadata
-     * @throws FilesystemException
      */
     public function mimeType(string $path): FileAttributes
     {
@@ -310,7 +366,6 @@ class UploadcareAdapter implements FilesystemAdapter
 
     /**
      * @throws UnableToRetrieveMetadata
-     * @throws FilesystemException
      */
     public function lastModified(string $path): FileAttributes
     {
@@ -319,7 +374,6 @@ class UploadcareAdapter implements FilesystemAdapter
 
     /**
      * @throws UnableToRetrieveMetadata
-     * @throws FilesystemException
      */
     public function fileSize(string $path): FileAttributes
     {
@@ -327,27 +381,28 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @return iterable<StorageAttributes>
-     *
-     * @throws FilesystemException
+     * @return iterable
      */
     public function listContents(string $path, bool $deep): iterable
     {
+        $result = $this->api->file()->listFiles();
+
+        return $result->getResults();
     }
 
     /**
      * @throws UnableToMoveFile
-     * @throws FilesystemException
      */
     public function move(string $source, string $destination, Config $config): void
     {
+        throw new UnableToMoveFile();
     }
 
     /**
      * @throws UnableToCopyFile
-     * @throws FilesystemException
      */
     public function copy(string $source, string $destination, Config $config): void
     {
+        throw new UnableToCopyFile();
     }
 }

@@ -16,15 +16,15 @@ class UploadcareAdapterServiceProvider extends ServiceProvider
             $api = new \Uploadcare\Api($configuration);
 
             $adapter = new UploadcareAdapter($api, $config);
-            FilesystemAdapter::macro('putGetUuid', function (string $path, string $contents) {
-                return Storage::disk('uploadcare')->getAdapter()->putGetUuid($path, $contents);
+            FilesystemAdapter::macro('putGetUuid', function (string $path, string $contents) use ($adapter) {
+                return $adapter->putGetUuid($path, $contents);
             });
-            FilesystemAdapter::macro('putFileGetUuid', function (string $path, $contents) {
-                return Storage::disk('uploadcare')->getAdapter()->putFileGetUuid($path, $contents);
+            FilesystemAdapter::macro('putFileGetUuid', function (string $path, $contents) use ($adapter) {
+                return $adapter->putFileGetUuid($path, $contents);
             });
             // $path, $file, $name = null, $options = []
-            FilesystemAdapter::macro('putFileAsGetUuid', function (string $path, $contents, $name, $options = []) {
-                return Storage::disk('uploadcare')->getAdapter()->putFileAsGetUuid($path, $contents, $name, $options);
+            FilesystemAdapter::macro('putFileAsGetUuid', function (string $path, $contents, $name, $options = []) use ($adapter) {
+                return $adapter->putFileAsGetUuid($path, $contents, $name, $options);
             });
 
             return new FilesystemAdapter(
