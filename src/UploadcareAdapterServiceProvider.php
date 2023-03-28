@@ -22,7 +22,6 @@ class UploadcareAdapterServiceProvider extends ServiceProvider
             FilesystemAdapter::macro('putFileGetUuid', function (string $path, $contents) use ($adapter) {
                 return $adapter->putFileGetUuid($path, $contents);
             });
-            // $path, $file, $name = null, $options = []
             FilesystemAdapter::macro('putFileAsGetUuid', function (string $path, $contents, $name, $options = []) use ($adapter) {
                 return $adapter->putFileAsGetUuid($path, $contents, $name, $options);
             });

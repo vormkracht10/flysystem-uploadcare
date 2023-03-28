@@ -22,6 +22,9 @@ use League\Flysystem\UnableToWriteFile;
 use Psr\Http\Message\StreamInterface;
 use Uploadcare\Exception\HttpException;
 
+/**
+ * @method string putGetUuid($path, $contents, $options = [])
+ */
 class UploadcareAdapter implements FilesystemAdapter
 {
     /** @var \Uploadcare\Api */
@@ -84,7 +87,6 @@ class UploadcareAdapter implements FilesystemAdapter
 
         return true;
     }
-
     /**
      * @throws UnableToWriteFile
      */
@@ -323,12 +325,18 @@ class UploadcareAdapter implements FilesystemAdapter
             throw new UnableToRetrieveMetadata($e->getMessage());
         }
 
+        return $this->getFileAttributes($info);
+    }
+
+    public function getFileAttributes($file)
+    {
         return new FileAttributes(
-            path: $info->getOriginalFilename(),
-            fileSize: $info->getSize(),
-            lastModified: strtotime($info->getDatetimeStored()->format('Y-m-d H:i:s')),
-            mimeType: $info->getMimeType(),
-            extraMetadata: (array) $info->getMetadata()
+            path: $file->getUuid(),
+            fileSize: $file->getSize(),
+            lastModified: strtotime($file->getDatetimeUploaded()->format('Y-m-d H:i:s')),
+            mimeType: $file->getMimeType(),
+            // Temporary removed, see https://github.com/uploadcare/uploadcare-php/pull/204
+            extraMetadata: [] // (array) $file->getMetadata()
         );
     }
 
@@ -356,13 +364,35 @@ class UploadcareAdapter implements FilesystemAdapter
         return $this->getFileinfo($path);
     }
 
+    /**
+     * Get files from uploadcare. If a group is provided, results from the group is returned
+     */
     public function listContents(string $path = '', bool $deep = true): iterable
     {
-        $result = $this->api->file()->listFiles();
+        // Folders in Uploadcare doesn't return paginated results
+        if (str_contains($path ?? '', '~')) {
+            $result = $this->api->group()->groupInfo($path);
 
-        return $result->getResults();
+            return array_map(function ($file) {
+                return $this->getFileAttributes($file);
+            }, $result->getFiles()->toArray());
+        }
+
+        // Normal file listing returns paginated results
+        $response = $this->api->file()->listFiles(1000);
+        
+        $results = $response->getResults()->toArray();
+
+        while($response->getNext()) {
+            $response = $this->api->file()->nextPage($response);
+            $results = array_merge($results, $response->getResults()->toArray());
+        }
+
+        return array_map(function ($file) {
+            return $this->getFileAttributes($file);
+        }, $results);
     }
-
+    
     /**
      * @throws UnableToMoveFile
      */
