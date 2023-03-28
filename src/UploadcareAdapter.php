@@ -371,7 +371,7 @@ class UploadcareAdapter implements FilesystemAdapter
     public function listContents(string $path = '', bool $deep = true): iterable
     {
         // Folders in Uploadcare doesn't return paginated results
-        if (str_contains($path ?? '', '~')) {
+        if (str_contains($path, '~')) {
             $result = $this->api->group()->groupInfo($path);
 
             return array_map(function ($file) {
