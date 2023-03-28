@@ -87,6 +87,7 @@ class UploadcareAdapter implements FilesystemAdapter
 
         return true;
     }
+
     /**
      * @throws UnableToWriteFile
      */
@@ -380,10 +381,10 @@ class UploadcareAdapter implements FilesystemAdapter
 
         // Normal file listing returns paginated results
         $response = $this->api->file()->listFiles(1000);
-        
+
         $results = $response->getResults()->toArray();
 
-        while($response->getNext()) {
+        while ($response->getNext()) {
             $response = $this->api->file()->nextPage($response);
             $results = array_merge($results, $response->getResults()->toArray());
         }
@@ -392,7 +393,7 @@ class UploadcareAdapter implements FilesystemAdapter
             return $this->getFileAttributes($file);
         }, $results);
     }
-    
+
     /**
      * @throws UnableToMoveFile
      */
