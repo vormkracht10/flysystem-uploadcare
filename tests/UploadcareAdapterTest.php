@@ -7,7 +7,6 @@ use Uploadcare\Api;
 use Uploadcare\Configuration;
 use Vormkracht10\UploadcareAdapter\UploadcareAdapter;
 
-
 beforeEach(function () {
     $this->api = new Api(Configuration::create('demopublickey', 'demosecretkey'));
 
@@ -34,14 +33,14 @@ it('does not find invalid files', function () {
     expect($exists)->toBeFalse();
 });
 
-it('writes streams and returns uuid', function() {
+it('writes streams and returns uuid', function () {
     $uuid = $this->uploadcareAdapter->writeStreamGetUuid('filename.txt', tmpfile(), new Config());
-    
+
     expect($uuid)->toBeString();
 });
 
-it('writes uploadedfile and returns uuid', function() {
-    $uploadedFile = new UploadedFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'dummy.txt', 'dummy.txt');
+it('writes uploadedfile and returns uuid', function () {
+    $uploadedFile = new UploadedFile(dirname(__FILE__).DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'dummy.txt', 'dummy.txt');
     $uuid = $this->uploadcareAdapter->putGetUuid('filename.txt', $uploadedFile);
 
     expect($uuid)->toBeString();
