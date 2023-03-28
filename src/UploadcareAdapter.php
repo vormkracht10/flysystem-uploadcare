@@ -356,7 +356,7 @@ class UploadcareAdapter implements FilesystemAdapter
         return $this->getFileinfo($path);
     }
 
-    public function listContents(string $path, bool $deep): iterable
+    public function listContents(string $path = '', bool $deep = true): iterable
     {
         $result = $this->api->file()->listFiles();
 
