@@ -47,29 +47,43 @@ $uuid = Storage::disk('uploadcare')->putFileAsGetUuid('files', new File('/var/ww
 
 ```
 
-Get the content of a file
-
+**Get the content of a file**
 ```php
-Storage::disk('uploadcare')->get('<uuid>');
+$contents = Storage::disk('uploadcare')->get('<uuid>');
 ```
 
-Deleting a file:
-
+**Deleting a file:**
 ```php
 Storage::disk('uploadcare')->delete('<uuid>');
 ```
 
-Getting the mimetype of a file
+**Getting the mimetype of a file**
 ```php
 $mimeType = Storage::disk('uploadcare')->mimeType('<uuid>');
 ```
 
-Get the filesize of a file
+**Get the filesize of a file**
 ```php
 $bytes = Storage::disk('uploadcare')->filesize('<uuid>');
 ```
 
-Working with images?
+**Get the original filename**
+```php
+$info = Storage::disk('uploadcare')->fileInfo($result[0]);
+$filename = $info->extraMetadata()['originalFilename'];
+```
+
+**Get a list of files**
+Directories in uploadcare are stored with an "~"-sign at the end of a uuid. Getting files from a directory could be retreived
+as follow:
+```php
+$files = Storage::disk('uploadcare')->fileInfo('0123a456-a0bc-0a1b-0ab1-0a1234a5b6c7~');
+foreach ($files as $uuid) {
+    echo 'https://ucarecdn.com/' . $uuid .'<br />';
+}
+```
+
+**Working with images?**
 See [github.com/vormkracht10/php-uploadcare-transformations](https://github.com/vormkracht10/php-uploadcare-transformations)
 
 ## Testing

@@ -47,11 +47,13 @@ it('writes uploadedfile and returns uuid', function () {
 });
 
 it('does get information of a file', function () {
-    $uuid = $this->uploadcareAdapter->writeGetUuid('filename.txt', 'content', new Config());
+    $uuid = $this->uploadcareAdapter->writeGetUuid($originalName = 'filename.txt', 'content', new Config());
 
     $fileInfo = $this->uploadcareAdapter->getFileinfo($uuid);
 
     expect($fileInfo)->toBeInstanceOf(FileAttributes::class);
+
+    expect($fileInfo->extraMetadata()['originalFilename'])->toBeString($originalName);
 });
 
 it('does list files', function () {
