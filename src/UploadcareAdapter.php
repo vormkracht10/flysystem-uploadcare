@@ -330,7 +330,7 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @param Uploadcare\File $file
+     * @param  Uploadcare\File  $file
      */
     public function getFileAttributes($file)
     {
@@ -339,7 +339,7 @@ class UploadcareAdapter implements FilesystemAdapter
             fileSize: $file->getSize(),
             lastModified: strtotime($file->getDatetimeUploaded()->format('Y-m-d H:i:s')),
             mimeType: $file->getMimeType(),
-            
+
             extraMetadata: array_merge([
                 'originalFilename' => $file->getOriginalFilename(),
             ],
