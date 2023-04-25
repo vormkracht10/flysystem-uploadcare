@@ -21,8 +21,8 @@ Add the following config to the `disk` array in config/filesystems.php
 [
     'uploadcare' => [
         'driver' => 'uploadcare',
-        'public_key' => env('UPLOADCARE_PUBLIC_KEY'),
-        'secret_key' => env('UPLOADCARE_SECRET_KEY'),
+        'public' => env('UPLOADCARE_PUBLIC_KEY'),
+        'secret' => env('UPLOADCARE_SECRET_KEY'),
         'cdn' => env('UPLOADCARE_CDN') // Default https://ucarecdn.com
     ]
 ]
