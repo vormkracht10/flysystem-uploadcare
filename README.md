@@ -74,10 +74,11 @@ $filename = $info->extraMetadata()['originalFilename'];
 ```
 
 **Get a list of files**
+
 Directories in uploadcare are stored with an "~"-sign at the end of a uuid. Getting files from a directory could be retreived
 as follow:
 ```php
-$files = Storage::disk('uploadcare')->fileInfo('0123a456-a0bc-0a1b-0ab1-0a1234a5b6c7~');
+$files = Storage::disk('uploadcare')->files('0123a456-a0bc-0a1b-0ab1-0a1234a5b6c7~');
 foreach ($files as $uuid) {
     echo 'https://ucarecdn.com/' . $uuid .'<br />';
 }
