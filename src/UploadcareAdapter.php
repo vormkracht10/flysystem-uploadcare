@@ -337,7 +337,7 @@ class UploadcareAdapter implements FilesystemAdapter
         return new FileAttributes(
             path: $file->getUuid(),
             fileSize: $file->getSize(),
-            lastModified: strtotime($file->getDatetimeUploaded()->format('Y-m-d H:i:s')),
+            lastModified: $file->getDatetimeUploaded() ? strtotime($file->getDatetimeUploaded()->format('Y-m-d H:i:s')) : null,
             mimeType: $file->getMimeType(),
 
             extraMetadata: array_merge([
