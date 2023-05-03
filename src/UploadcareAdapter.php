@@ -330,7 +330,7 @@ class UploadcareAdapter implements FilesystemAdapter
     }
 
     /**
-     * @param  Uploadcare\File  $file
+     * @param  \Uploadcare\File  $file
      */
     public function getFileAttributes($file)
     {
