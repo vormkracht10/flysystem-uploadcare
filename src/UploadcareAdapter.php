@@ -76,6 +76,10 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function directoryExists(string $path): bool
     {
+        if (!str_contains($path, '~')) {
+            return false;
+        }
+        
         try {
             $this->api->group()->groupInfo($path);
         } catch (\Uploadcare\Exception\HttpException $e) {
