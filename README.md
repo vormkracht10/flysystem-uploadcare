@@ -1,4 +1,4 @@
-# Flysystem adapter for Uploadcare
+# Laravel Uploadcare integration Filesystem (Flysystem adapter)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/vormkracht10/flysystem-uploadcare.svg?style=flat-square)](https://packagist.org/packages/vormkracht10/flysystem-uploadcare)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/vormkracht10/flysystem-uploadcare/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/vormkracht10/flysystem-uploadcare/actions?query=workflow%3Arun-tests+branch%3Amain)
