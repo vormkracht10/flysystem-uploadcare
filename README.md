@@ -28,9 +28,11 @@ Add the following config to the `disk` array in config/filesystems.php
 ]
 ```
 
-Then set the `FILESYSTEM_DISK` to `uploadcare` in your .env
+Then set the `FILESYSTEM_DISK` to `uploadcare` and set your public/secret keys in your .env
 
 ```env
+UPLOADCARE_PUBLIC_KEY=
+UPLOADCARE_SECRET_KEY=
 FILESYSTEM_DISK=uploadcare
 ```
 
