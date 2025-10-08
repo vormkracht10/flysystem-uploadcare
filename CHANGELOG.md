@@ -15,6 +15,7 @@ All notable changes to `flysystem-uploadcare` will be documented in this file.
   - Updated `pestphp/pest` to ^3.0
   - Updated `pestphp/pest-plugin-laravel` to ^3.0
   - Updated `phpunit/phpunit` to ^11.0
+  - Replaced `nunomaduro/larastan` with `larastan/larastan` ^3.0 for Laravel 12 support
 
 ## [0.1.3] - Previous Release
 
