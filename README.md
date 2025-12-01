@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/vormkracht10/flysystem-uploadcare/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/vormkracht10/flysystem-uploadcare/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/vormkracht10/flysystem-uploadcare.svg?style=flat-square)](https://packagist.org/packages/vormkracht10/flysystem-uploadcare)
 
-Flysystem adapter for Uploadcare with support for Laravel v9+.
+Flysystem adapter for Uploadcare with support for Laravel v9+ including Laravel 12.
 
 ## Installation
 
