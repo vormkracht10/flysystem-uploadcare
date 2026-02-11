@@ -14,13 +14,13 @@ beforeEach(function () {
 });
 
 it('writes and returns uuid', function () {
-    $uuid = $this->uploadcareAdapter->writeGetUuid('filename.txt', 'content', new Config());
+    $uuid = $this->uploadcareAdapter->writeGetUuid('filename.txt', 'content', new Config);
 
     expect($uuid)->toBeString();
 });
 
 it('does find existing files', function () {
-    $uuid = $this->uploadcareAdapter->writeGetUuid('filename.txt', 'content', new Config());
+    $uuid = $this->uploadcareAdapter->writeGetUuid('filename.txt', 'content', new Config);
 
     $exists = $this->uploadcareAdapter->fileExists($uuid);
 
@@ -34,7 +34,7 @@ it('does not find invalid files', function () {
 });
 
 it('writes streams and returns uuid', function () {
-    $uuid = $this->uploadcareAdapter->writeStreamGetUuid('filename.txt', tmpfile(), new Config());
+    $uuid = $this->uploadcareAdapter->writeStreamGetUuid('filename.txt', tmpfile(), new Config);
 
     expect($uuid)->toBeString();
 });
@@ -47,7 +47,7 @@ it('writes uploadedfile and returns uuid', function () {
 });
 
 it('does get information of a file', function () {
-    $uuid = $this->uploadcareAdapter->writeGetUuid($originalName = 'filename.txt', 'content', new Config());
+    $uuid = $this->uploadcareAdapter->writeGetUuid($originalName = 'filename.txt', 'content', new Config);
 
     $fileInfo = $this->uploadcareAdapter->getFileinfo($uuid);
 
