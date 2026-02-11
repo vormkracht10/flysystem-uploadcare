@@ -76,10 +76,10 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function directoryExists(string $path): bool
     {
-        if (!str_contains($path, '~')) {
+        if (! str_contains($path, '~')) {
             return false;
         }
-        
+
         try {
             $this->api->group()->groupInfo($path);
         } catch (\Uploadcare\Exception\HttpException $e) {
@@ -311,7 +311,7 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function setVisibility(string $path, string $visibility): void
     {
-        throw new InvalidVisibilityProvided();
+        throw new InvalidVisibilityProvided;
     }
 
     /**
@@ -411,7 +411,7 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function move(string $source, string $destination, Config $config): void
     {
-        throw new UnableToMoveFile();
+        throw new UnableToMoveFile;
     }
 
     /**
@@ -419,6 +419,6 @@ class UploadcareAdapter implements FilesystemAdapter
      */
     public function copy(string $source, string $destination, Config $config): void
     {
-        throw new UnableToCopyFile();
+        throw new UnableToCopyFile;
     }
 }
